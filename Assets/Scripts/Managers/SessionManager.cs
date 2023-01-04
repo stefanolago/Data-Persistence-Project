@@ -73,6 +73,8 @@ public class SessionManager : MonoBehaviour
         {
             highestScore.playerName = currentScore.playerName;
             highestScore.points = currentScore.points;
+
+            SaveHighScore();
         }
     }
 
