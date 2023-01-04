@@ -11,10 +11,11 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text BestScoreText;
+
     public GameObject GameOverText;
     
     private bool m_Started = false;
-    private int m_Points;
     
     private bool m_GameOver = false;
 
@@ -37,7 +38,9 @@ public class MainManager : MonoBehaviour
             }
         }
 
-        UpdateScore();
+        SessionManager.Instance.ResetScore();
+        UpdateScoreText();
+        UpdateBestScoreText();
     }
 
     private void Update()
@@ -66,17 +69,29 @@ public class MainManager : MonoBehaviour
 
     void AddPoint(int point)
     {
-        m_Points += point;
-        UpdateScore();
+        SessionManager.Instance.currentScore.points += point;
+        UpdateScoreText();
     }
 
-    void UpdateScore()
+    void UpdateScoreText()
     {
-        ScoreText.text = SessionManager.Instance.playerName + " " + $"Score : {m_Points}";
+        ScoreText.text = SessionManager.Instance.currentScore.playerName + " " + 
+            $"Score : {SessionManager.Instance.currentScore.points}";
+    }
+
+    public void UpdateBestScoreText()
+    {
+        BestScoreText.text = 
+            "Best Score: " + 
+            SessionManager.Instance.highestScore.playerName + 
+            " " + 
+            SessionManager.Instance.highestScore.points;
     }
 
     public void GameOver()
     {
+        SessionManager.Instance.UpdateHighScore();
+        UpdateBestScoreText();
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
